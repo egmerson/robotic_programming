@@ -3,7 +3,7 @@
 # 2021.1
 
 from random import randrange
-from plotLib import plotRealEnv, plotRobEnv, plotPlanningMap
+from plotlib import plotRealEnv, plotRobEnv, plotPlanningMap
 
 class envClass:
 
