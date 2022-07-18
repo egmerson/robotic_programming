@@ -1,5 +1,9 @@
 #Aqui vou fazer os testes do programa
 
+#imports
+
+import numpy as np
+
 #Ambiente. 
 class envClass:
 
@@ -24,17 +28,17 @@ class envClass:
         
         self.nbRow = informacoes_do_ambiente[0]
         self.nbCol = informacoes_do_ambiente[1]
-        #self.map =
+        self.map = np.zeros((self.nbRow,self.nbRow), dtype=int)
 
     def imprime(self):
         #Teste para imprimir os dados do arquivo
         print('O numero de colunas é {} e o tipo do dado é {}'.format(self.nbCol,type(self.nbCol)))
         print('O numero de linhas é {} e o tipo do dado é {}'.format(self.nbRow,type(self.nbRow)))
 
-    def addObstacle(self):
+    def addObstacle(self, linha, coluna):
         #Metodo do objeto para adicionar os obstáculos
-        pass
+        self.map[linha][coluna] = -1
 
-    def subObstacle(self):
+    def subObstacle(self, linha, coluna):
         #Metodo do objeto para remover os obstáculos
-        pass
+        self.map[linha][coluna] = 0
