@@ -13,6 +13,7 @@ class envClass:
         self.map =
 
     def addObstacle(...):
+        pass
 
 
 class robotClass:
