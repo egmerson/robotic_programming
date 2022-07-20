@@ -2,8 +2,6 @@
 
 #imports
 
-import numpy as np
-
 #Ambiente. 
 class envClass:
 
@@ -28,17 +26,42 @@ class envClass:
         
         self.nbRow = informacoes_do_ambiente[0]
         self.nbCol = informacoes_do_ambiente[1]
-        self.map = np.zeros((self.nbRow,self.nbRow), dtype=int)
+        
+        #Mapa inicial
+        envMaptoPlot = []
+        line = []
+        for i in range(self.nbRow):
+            line = []
+            for j in range(self.nbCol):
+                line.append(0)
+            envMaptoPlot.append(line)
+        
+        self.map = envMaptoPlot
 
     def imprime(self):
         #Teste para imprimir os dados do arquivo
         print('O numero de colunas é {} e o tipo do dado é {}'.format(self.nbCol,type(self.nbCol)))
         print('O numero de linhas é {} e o tipo do dado é {}'.format(self.nbRow,type(self.nbRow)))
+        print(self.map)
 
     def addObstacle(self, linha, coluna):
         #Metodo do objeto para adicionar os obstáculos
-        self.map[linha][coluna] = -1
+        if (linha > self.nbRow or linha < 0):
+            print('Você digitou um valor de linha fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbRow))
+        elif (coluna > self.nbRow or coluna < 0):
+            print('Você digitou um valor de coluna fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbCol))
+        else:
+            self.map[linha][coluna] = -1
 
     def subObstacle(self, linha, coluna):
         #Metodo do objeto para remover os obstáculos
-        self.map[linha][coluna] = 0
+        if (linha > self.nbRow or linha < 0):
+            print('Você digitou um valor de linha fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbRow))
+        elif (coluna > self.nbRow or coluna < 0):
+            print('Você digitou um valor de coluna fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbCol))
+        else:
+            self.map[linha][coluna] = -1
+
+teste = envClass()
+
+teste.imprime()
