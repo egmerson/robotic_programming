@@ -46,22 +46,20 @@ class envClass:
 
     def addObstacle(self, linha, coluna):
         #Metodo do objeto para adicionar os obstáculos
+        if (0 <= linha <= self.nbRow and 0 <= coluna <= self.nbCol):
+            self.map[linha][coluna] = -1
+
         if (linha > self.nbRow or linha < 0):
             print('Você digitou um valor de linha fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbRow))
-        elif (coluna > self.nbRow or coluna < 0):
+        if (coluna > self.nbRow or coluna < 0):
             print('Você digitou um valor de coluna fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbCol))
-        else:
-            self.map[linha][coluna] = -1
 
     def subObstacle(self, linha, coluna):
         #Metodo do objeto para remover os obstáculos
-        if (linha > self.nbRow or linha < 0):
-            print('Você digitou um valor de linha fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbRow))
-        elif (coluna > self.nbRow or coluna < 0):
-            print('Você digitou um valor de coluna fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbCol))
-        else:
+        if (0 <= linha <= self.nbRow and 0 <= coluna <= self.nbCol):
             self.map[linha][coluna] = -1
 
-teste = envClass()
-
-teste.imprime()
+        if (linha > self.nbRow or linha < 0):
+            print('Você digitou um valor de linha fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbRow))
+        if (coluna > self.nbRow or coluna < 0):
+            print('Você digitou um valor de coluna fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbCol))
