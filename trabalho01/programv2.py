@@ -2,15 +2,13 @@
 
 #Aqui vou fazer os testes do programa
 
-#imports
-
-#Ambiente.
+#Criação da Class Ambiente.
 class envClass:
 
     def __init__(self):
 
         #abrindo o arquivo que foi passado com as informações do ambiente
-        self.arquivo = open('entradas', 'r')
+        self.arquivo = open('entradas.txt', 'r')
 
         #Criando lista que receberá as informações do arquivo
         informacoes_do_ambiente = []
@@ -29,7 +27,7 @@ class envClass:
         self.nbRow = informacoes_do_ambiente[0]
         self.nbCol = informacoes_do_ambiente[1]
 
-        #Mapa inicial
+        #Gerando o mapa inicial preenchido com zeros
         envMaptoPlot = []
         line = []
         for i in range(self.nbRow):
@@ -47,6 +45,7 @@ class envClass:
         print(self.map)
 
     def mapa_ambiente(self):
+        
         return self.map
 
     def addObstacle(self, linha, coluna):
@@ -74,7 +73,7 @@ class robot:
     def __init__(self):
 
         #abrindo o arquivo que foi passado com as informações do ambiente
-        self.arquivo = open('robot', 'r')
+        self.arquivo = open('robot.txt', 'r')
 
         #Criando lista que receberá as informações do arquivo
         informacoes_do_robo = []
