@@ -216,7 +216,9 @@ class robot:
         print('Mapa de potênciais atualizado:')
         print(self.mapa_de_potenciais)
 
-        #planejando o caminho
+        #range de movimentação permitida
+
+        #Interseção linha
         
         range_de_movimentacao_linha = list(range((self.posicao_atual_do_robo_linha - self.movimentacao, self.posicao_atual_do_robo_linha + self.movimentacao +1)))
 
@@ -225,6 +227,20 @@ class robot:
             if i in range_de_movimentacao_linha:
                 lista_auxiliar_linha.append(i)
         range_de_movimentacao_linha_filtrada = lista_auxiliar_linha.copy()
+        
+        #Interseção coluna
+
+        range_de_movimentacao_coluna = list(range((self.posicao_atual_do_robo_coluna - self.movimentacao, self.posicao_atual_do_robo_coluna + self.movimentacao +1)))
+
+        lista_auxiliar_coluna = []
+        for i in range(self.nbRow):
+            if i in range_de_movimentacao_coluna:
+                lista_auxiliar_coluna.append(i)
+        range_de_movimentacao_linha_filtrada = lista_auxiliar_coluna.copy()
+
+        
+
+
 
 
 
