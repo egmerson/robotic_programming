@@ -10,7 +10,7 @@ class envClass:
     def __init__(self):
 
         #abrindo o arquivo que foi passado com as informações do ambiente
-        self.arquivo = open('entradas.txt', 'r')
+        self.arquivo = open('entradas', 'r')
 
         #Criando lista que receberá as informações do arquivo
         informacoes_do_ambiente = []
@@ -88,7 +88,7 @@ class robot:
     def __init__(self):
 
         #abrindo o arquivo que foi passado com as informações do ambiente
-        self.arquivo = open('robot.txt', 'r')
+        self.arquivo = open('robot', 'r')
 
         #Criando lista que receberá as informações do arquivo
         informacoes_do_robo = []
