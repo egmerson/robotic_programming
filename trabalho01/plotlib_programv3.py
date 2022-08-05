@@ -75,13 +75,13 @@ def plotRobEnv(rob):
     for i in range(rob.nbRow):
         for j in range(rob.nbCol):
             robMaptoPlot[i][j] = rob.mapa_do_robo[i][j]
-    print(robMaptoPlot)
+    #print(robMaptoPlot)
 
     for index in rob.path:
         robMaptoPlot[index[0]][index[1]] = 1
     robMaptoPlot[rob.destino_linha][rob.destino_coluna] = -2
     robMaptoPlot[rob.posicao_atual_do_robo_linha][rob.posicao_atual_do_robo_coluna] = -3
-    print(robMaptoPlot)
+    #print(robMaptoPlot)
 
     # create discrete colormap
     cmap = colors.ListedColormap(['blue','green','black','white','yellow'])

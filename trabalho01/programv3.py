@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-#Aqui vou fazer os testes do programa
-
 #imports
+from random import randint
 from plotlib_programv3 import plotRealEnv, plotRobEnv, plotPlanningMap
 
 #Criação da Class Ambiente.
@@ -27,6 +26,8 @@ class envClass:
         #fechando o arquivo
         self.arquivo.close()
 
+        #Passando as informações para as variáveis
+
         self.nbRow = informacoes_do_ambiente[0]
         self.nbCol = informacoes_do_ambiente[1]
 
@@ -39,34 +40,36 @@ class envClass:
                 line.append(0)
             envMaptoPlot.append(line)
 
+        #Atributo Self.map recebe o mapa do ambiente vazio
+
         self.map = envMaptoPlot
 
     def imprime(self):
-        #Teste para imprimir os dados do arquivo prinade representando o ambiente conhecido pelo robô.
+        #Teste para imprimir os dados do arquivo representando o ambiente conhecido pelo robô.
         print('O numero de colunas é {} e o tipo do dado é {}'.format(self.nbCol,type(self.nbCol)))
         print('O numero de linhas é {} e o tipo do dado é {}'.format(self.nbRow,type(self.nbRow)))
         print(self.map)
-        #print('Esse é o mapa atual do meu ambiente {}'.format(self.map))
+        print('Esse é o mapa atual do meu ambiente {}'.format(self.map))
 
     def mapa_ambiente(self):
-
+        #função que retona o mapa do ambiente
         return self.map
 
     def addObstacle(self, linha, coluna):
-        #Metodo do objeto para adicionar os obstáculos
+        #Metodo do objeto ambiente para adicionar os obstáculos
 
         #Checando se o valor esta detro da área do mapa
         if (0 <= linha < self.nbRow and 0 <= coluna < self.nbCol):
             self.map[linha][coluna] = -1
 
-        #Saidas caso esteja fora do range do mapa
+        #Saídas caso esteja fora do range do mapa
         if (linha >= self.nbRow or linha < 0):
             print('Você digitou um valor de linha fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbRow))
         if (coluna >= self.nbRow or coluna < 0):
             print('Você digitou um valor de coluna fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbCol))
 
     def subObstacle(self, linha, coluna):
-        #Metodo do objeto para remover os obstáculos
+        #Metodo do objeto ambiente para remover os obstáculos
 
         #Checando se o valor esta detro da área do mapa
         if (0 <= linha < self.nbRow and 0 <= coluna < self.nbCol):
@@ -78,8 +81,10 @@ class envClass:
         if (coluna >= self.nbRow or coluna < 0):
             print('Você digitou um valor de coluna fora do range. Precisa ser um valor entre 0 e {}'.format(self.nbCol))
 
-class robot:
 
+#Criação da classe robô
+class robot:
+    
     def __init__(self):
 
         #abrindo o arquivo que foi passado com as informações do ambiente
@@ -99,16 +104,19 @@ class robot:
         #fechando o arquivo
         self.arquivo.close()
 
+        #iniciando os atributos da classe
+
         self.nbRow = informacoes_do_robo[0]
         self.nbCol = informacoes_do_robo[1]
         self.posicao_atual_do_robo_linha = informacoes_do_robo[2]
         self.posicao_atual_do_robo_coluna = informacoes_do_robo[3]
-        self.destino_linha = 0
-        self.destino_coluna = 0
+        self.destino_linha = randint(0,self.nbRow -1)
+        self.destino_coluna = randint(0,self.nbCol -1)
         self.sensorRange = informacoes_do_robo[4]
         self.mapa_do_robo = []
         self.mapa_de_potenciais = []
         self.movimentacao = 1
+        self.path = []
 
         #Gera o mapa inicial do Robo com zeros
         envMaptoPlot = []
@@ -151,7 +159,7 @@ class robot:
             self.mapa_do_robo[fimx][fimy] = 1
             self.destino_linha = fimx
             self.destino_coluna = fimy
-            print('Nova posicao: Linha {} e coluna {}'.format(self.destino_linha,self.destino_coluna))
+            #print('Nova posicao: Linha {} e coluna {}'.format(self.destino_linha,self.destino_coluna))
 
         #Saidas caso esteja fora do range do mapa
         if (fimx >= self.nbRow or fimx < 0):
@@ -162,115 +170,118 @@ class robot:
     def varredura(self, mapa):
         #Sente a presenca ou não de um obstaculo e atualiza o mapa do robô. A entrada mapa representa uma lista com o mapa atual do robô
 
-        range_de_varredura_linha = list(range(self.posicao_atual_do_robo_linha - self.sensorRange, self.posicao_atual_do_robo_linha + self.sensorRange +1))
-        print('Range de visualização linha')
-        print(range_de_varredura_linha)
+        #Range_de_varredura_linha recebe uma lista que representa o range de visão horizontal do robô
 
-        #Interseção linha
+        range_de_varredura_linha = list(range(self.posicao_atual_do_robo_linha - self.sensorRange, self.posicao_atual_do_robo_linha + self.sensorRange +1))
+
+        #Interseção linha. Aqui garantimso que o robôs so consiga ver dentro do ambiente. Ele não pode ver além do tamanho do ambiente.
+        #Fazemos uma interseção do quanto ele pode ver e o tamanho do ambiente
 
         lista_auxiliar_linha = []
         for i in range(self.nbRow):
             if i in range_de_varredura_linha:
                 lista_auxiliar_linha.append(i)
         range_de_varredura_linha_filtrada = lista_auxiliar_linha.copy()
-        print('Range de visualização linha filtrada')
-        print(range_de_varredura_linha_filtrada)
+
+        #Range_de_varredura_coluna recebe uma lista que representa o range de visão vertical do robô
 
         range_de_varredura_coluna = list(range(self.posicao_atual_do_robo_coluna - self.sensorRange, self.posicao_atual_do_robo_coluna + self.sensorRange +1))
-        print('Range de visualização coluna')
-        print(range_de_varredura_coluna)
 
-        #interseção coluna
+        #interseção coluna. Aqui garantimso que o robôs so consiga ver dentro do ambiente. Ele não pode ver além do tamanho do ambiente.
+        #Fazemos uma interseção do quanto ele pode ver e o tamanho do ambiente
 
         lista_auxiliar_coluna = []
         for i in range(self.nbRow):
             if i in range_de_varredura_coluna:
                 lista_auxiliar_coluna.append(i)
         range_de_varredura_coluna_filtrada = lista_auxiliar_coluna.copy()
-        print('Range de visualização coluna filtrada')
-        print(range_de_varredura_coluna_filtrada)
+
+        #Atualizar o mapa conhecido pelo robô com as informações que ele varreu do ambiente
 
         for i in range_de_varredura_linha_filtrada:
             for j in range_de_varredura_coluna_filtrada:
                 if self.mapa_do_robo[i][j] != 1:
                     self.mapa_do_robo[i][j] = mapa[i][j]
-        print('Mapa do robo:')
-        print(self.mapa_do_robo)
 
     def caminho(self):
-        #montar matriz de mapa_de_potenciais
+
+        #montar matriz de mapa_de_potenciais inicial
         self.mapa_de_potenciais[self.destino_linha][self.destino_coluna] = 1
 
         for i in range(self.nbRow):
 
             for j in range(self.nbCol):
                 self.mapa_de_potenciais[i][j] = abs((self.destino_linha - i)) + abs((self.destino_coluna -j)) +1
-        print('Mapa de potenciais:')
-        print(self.mapa_de_potenciais)
 
         #atualizando o mapa de potênciais com os valores conhecidos pelo robô
         for i in range(self.nbRow):
             for j in range(self.nbCol):
                 if self.mapa_do_robo[i][j] == -1:
                     self.mapa_de_potenciais[i][j] = -1
-        print('Mapa de potênciais atualizado:')
-        print(self.mapa_de_potenciais)
-
-        #range de movimentação permitida
-
-        #Interseção linha
-        
-        range_de_movimentacao_linha = list(range((self.posicao_atual_do_robo_linha - self.movimentacao, self.posicao_atual_do_robo_linha + self.movimentacao +1)))
-
-        lista_auxiliar_linha = []
-        for i in range(self.nbRow):
-            if i in range_de_movimentacao_linha:
-                lista_auxiliar_linha.append(i)
-        range_de_movimentacao_linha_filtrada = lista_auxiliar_linha.copy()
-        
-        #Interseção coluna
-
-        range_de_movimentacao_coluna = list(range((self.posicao_atual_do_robo_coluna - self.movimentacao, self.posicao_atual_do_robo_coluna + self.movimentacao +1)))
-
-        lista_auxiliar_coluna = []
-        for i in range(self.nbRow):
-            if i in range_de_movimentacao_coluna:
-                lista_auxiliar_coluna.append(i)
-        range_de_movimentacao_linha_filtrada = lista_auxiliar_coluna.copy()
-
         
 
+        #planejando o caminho
+
+        #Aqui o passamos os valores do mapa de potênciais nas posições que o robô pode se mover para uma lista
+
+        possiveis_movimentacao_campo = [self.mapa_de_potenciais[self.posicao_atual_do_robo_linha -self.movimentacao][self.posicao_atual_do_robo_coluna],
+        self.mapa_de_potenciais[self.posicao_atual_do_robo_linha +self.movimentacao][self.posicao_atual_do_robo_coluna],
+        self.mapa_de_potenciais[self.posicao_atual_do_robo_linha][self.posicao_atual_do_robo_coluna -self.movimentacao],
+        self.mapa_de_potenciais[self.posicao_atual_do_robo_linha][self.posicao_atual_do_robo_coluna +self.movimentacao]]
+
+         #Aqui o passamos para uma lista as possiveis coordenadas das movimentações do robô de a cordo com a posição atual dele
+
+        possiveis_movimentacao = [[self.posicao_atual_do_robo_linha -self.movimentacao ,self.posicao_atual_do_robo_coluna],
+        [self.posicao_atual_do_robo_linha +self.movimentacao,self.posicao_atual_do_robo_coluna],
+        [self.posicao_atual_do_robo_linha,self.posicao_atual_do_robo_coluna -self.movimentacao],
+        [self.posicao_atual_do_robo_linha,self.posicao_atual_do_robo_coluna +self.movimentacao]]
+
+        #print(possiveis_movimentacao)
+
+        for i in range(0,4):
+            if self.mapa_de_potenciais[self.posicao_atual_do_robo_linha][self.posicao_atual_do_robo_coluna] > possiveis_movimentacao_campo[i] and possiveis_movimentacao_campo[i] != -1:
+                self.path.append(possiveis_movimentacao[possiveis_movimentacao_campo.index(possiveis_movimentacao_campo[i])])
+                nova_posicao_robo = possiveis_movimentacao[possiveis_movimentacao_campo.index(possiveis_movimentacao_campo[i])]
+                break
+
+        return nova_posicao_robo
+
+    def move(self,nova_posicao):
+        
+        #metodo para mover o robô
+
+        self.posicao_atual_do_robo_linha = nova_posicao[0]
+        self.posicao_atual_do_robo_coluna = nova_posicao[1]
 
 
 
-
-
-####### Inicio das Chamadas ######
+####### MAIN ######
 
 #Criando o objeto ambiente
 ambiente1 = envClass()
-#Imprime o ambiente
-ambiente1.imprime()
-#adicionando obstáculos
-ambiente1.addObstacle(0,0)
-ambiente1.addObstacle(0,1)
-ambiente1.addObstacle(5,5)
-ambiente1.addObstacle(4,5)
-#variável qie recebe o mapa horiginal do ambiente
+
+#Adicionando obstáculos aleatórios ao ambiente
+for i in range(0,30):
+    ambiente1.addObstacle(randint(0,ambiente1.nbRow -1),randint(0,ambiente1.nbCol -1))
+
+#Variável que recebe o mapa do ambiente
 mapa_ambiente1 = ambiente1.mapa_ambiente()
 
 #criando o objeto robo
 robo = robot()
-#imprime as informações do objeto robô
-robo.imprime()
-#adiciona a posição desejada
-robo.posicao_desejada(3,3)
-#atualiza o mapa do robô
-robo.varredura(mapa_ambiente1)
-robo.caminho()
 
 #plotando o ambiente real
-#plotRealEnv(ambiente1,robo)
+plotRealEnv(ambiente1,robo)
 
-##plotando o ambiente conhecido do robô
-#plotRobEnv(robo)
+#inicio da movimentação do robô
+
+while ((robo.destino_linha != robo.posicao_atual_do_robo_linha) or (robo.destino_coluna != robo.posicao_atual_do_robo_coluna)):
+    #atualiza o mapa do robô
+
+    robo.varredura(mapa_ambiente1)
+    proximo_passo = robo.caminho()
+    robo.move(proximo_passo)
+
+    ##plotando o ambiente conhecido do robô
+    plotRobEnv(robo)
+
